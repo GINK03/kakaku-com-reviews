@@ -13,6 +13,8 @@ from collections import Counter
 import math
 
 import MeCab 
+
+import re
 if '--wakati1' in sys.argv:
   m = MeCab.Tagger('-Owakati')
 
@@ -23,11 +25,28 @@ if '--wakati1' in sys.argv:
     for obj in objs:
       types = obj['types'] 
       box = m.parse(obj['box']).strip().split()
+      box = [ b for b in box if re.search(r'^\d{1,}$', b) is None ]
       term_freq = dict(Counter(box))
       data.append( (types, term_freq) )
 
   open('wakati1.json', 'w').write( json.dumps(data, indent=2, ensure_ascii=False) )
 
+if '--trigram1' in sys.argv:
+  data = []
+  for name in sorted( glob.glob('parsed/*.json') )[:20]:
+    print(name)
+    objs = json.loads( open(name).read() )
+    for obj in objs:
+      types = obj['types'] 
+      text = obj['box']
+      size = len(text)
+      box = []
+      for i in range(size-1):
+        box.append( text[i:i+1] )
+      term_freq = dict(Counter(box))
+      data.append( (types, term_freq) )
+  open('wakati1.json', 'w').write( json.dumps(data, indent=2, ensure_ascii=False) )
+  
 if '--term_index1' in sys.argv:
   wakatis = json.loads( open('wakati1.json').read() ) 
   terms = set()
