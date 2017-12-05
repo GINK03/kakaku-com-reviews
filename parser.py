@@ -39,8 +39,9 @@ def _map(arr):
       print(key, types, src,box)
       type_boxs.append( {'types':types, 'box':box} )
   open('parsed/{}.json'.format(key), 'w').write( json.dumps(type_boxs, indent=2, ensure_ascii=False) )
+
 arrs = {}
-for index, name in enumerate(glob.glob('../21/*')):
+for index, name in enumerate(glob.glob('../minio-s3/kakaku-com-htmls-20171205-snapshot/*')):
   if 'bbs.kakaku.com' not in name:
     continue
   print(name)
