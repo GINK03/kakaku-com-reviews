@@ -31,9 +31,9 @@ if '--wakati1' in sys.argv:
 
   open('wakati1.json', 'w').write( json.dumps(data, indent=2, ensure_ascii=False) )
 
-if '--trigram1' in sys.argv:
+if '--ngram1' in sys.argv:
   data = []
-  for name in sorted( glob.glob('parsed/*.json') )[:20]:
+  for index, name in enumerate( sorted( glob.glob('parsed/*.json') ) ):
     print(name)
     objs = json.loads( open(name).read() )
     for obj in objs:
@@ -45,7 +45,7 @@ if '--trigram1' in sys.argv:
         box.append( text[i:i+1] )
       term_freq = dict(Counter(box))
       data.append( (types, term_freq) )
-  open('wakati1.json', 'w').write( json.dumps(data, indent=2, ensure_ascii=False) )
+    open('wakatis/wakati_{}.json'.format(index), 'w').write( json.dumps(data, indent=2, ensure_ascii=False) )
   
 if '--term_index1' in sys.argv:
   wakatis = json.loads( open('wakati1.json').read() ) 
